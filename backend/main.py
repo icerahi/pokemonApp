@@ -1,0 +1,74 @@
+from typing import List
+from fastapi import FastAPI,HTTPException
+from fastapi.params import Depends
+from sqlalchemy.orm.session import Session 
+from src import database,models,schemas,token,oauth2
+from src.hashing import Hash
+from fastapi.security import OAuth2PasswordRequestForm
+from sqlalchemy import or_
+
+models.Base.metadata.create_all(database.engine)
+
+get_db = database.get_db
+
+app = FastAPI()
+
+@app.get('/all',response_model=List[schemas.ShowPokemon])
+def all_pokemon(db:Session=Depends(get_db),current_user:schemas.User=Depends(oauth2.get_current_user)):
+    print(current_user)
+    return  db.query(models.Pokemon).all()
+
+@app.get('/mypokemon',response_model=List[schemas.ShowPokemon])
+def all_pokemon(db:Session=Depends(get_db),current_user:schemas.User=Depends(oauth2.get_current_user)):
+    print(current_user)
+    pokemon= db.query(models.Pokemon).filter(models.Pokemon.user_id==current_user.user_id)
+    # filter = pokemon.filter(models.Pokemon.user_id==current_user.user_id)
+    # print(filter)
+    print(pokemon)
+    return pokemon
+
+
+@app.post('/add') 
+def add_pokemon(pokemon:schemas.Pokemon,db:Session=Depends(get_db),current_user:schemas.User=Depends(oauth2.get_current_user)):
+    new_pokemon = models.Pokemon(
+        name=pokemon.name,
+        image=pokemon.image,
+        type=pokemon.type,
+        user_id = current_user.user_id
+        )
+    db.add(new_pokemon)
+    db.commit()
+    db.refresh(new_pokemon)
+    return new_pokemon
+
+
+@app.post('/signup',response_model=schemas.ShowUser)
+def signup(user:schemas.User,db:Session=Depends(get_db)):
+    user_exists= db.query(models.User).filter(or_
+                                              (models.User.email==user.email,
+                                               models.User.username==user.username)).first()
+    print(user_exists)
+    if user_exists is not None:
+        raise HTTPException(status_code=409,detail='User already exists with this email or username!!')
+    
+    new_user = models.User(username=user.username,email=user.email,password=Hash.bcrypt(user.password))
+    db.add(new_user) 
+    db.commit()
+    db.refresh(new_user)
+    return new_user
+
+@app.post('/login')
+def login(request:OAuth2PasswordRequestForm=Depends(),db:Session=Depends(get_db)):
+    user = db.query(models.User).filter(or_(models.User.email==request.username,models.User.username==request.username)).first()    
+    if not user:
+        raise HTTPException(status_code=404,detail="Invalid Credentials")
+    if not Hash.verify(request.password,user.password):
+        raise HTTPException(status_code=404,detail='Incorrect Password!!')
+    
+    #genarate a jwt token for
+    access_token=oauth2.create_access_token(
+        token={'email':user.email,
+              'username':user.username,
+              'user_id':user.id}
+    )
+    return {'access_token':access_token}
