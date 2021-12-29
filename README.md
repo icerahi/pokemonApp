@@ -64,7 +64,9 @@ And inside the src folder open the .env file and comment down `production domain
 ```
 It will open the Project in your default browser: http://localhost:3000
 
-  
+## Screenshots
+  ![Pokemon](https://user-images.githubusercontent.com/32910469/147686907-e9d25e87-1cdd-4742-944e-da0783ab3328.png)
+
 ## Authors
 
 - [Imran Hasan Rahi](https://linkedin.com/in/icerahi)
