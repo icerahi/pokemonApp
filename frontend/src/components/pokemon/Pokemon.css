@@ -1,0 +1,68 @@
+.task-card{
+    border-top-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    position: relative;
+    border:1px solid whitesmoke;
+    box-shadow: 5px 8px 5px 1px lightgray;
+  
+}
+.task-card:hover{
+    cursor: pointer;
+
+}
+input[type='color']{
+    border:none;
+    opacity: 0;
+}
+
+.color-icon{
+    color:white;
+}
+.color-input,.color-icon,.panel{
+    position: absolute;
+    bottom: 0%;
+    right:0%;
+}
+.panel{
+    display: none;
+}
+.add-to-fav{
+    display: none;
+}
+.task-card:hover .add-to-fav{
+    display: block;
+    position:absolute;
+    top:-2%;
+    right:-2%;
+    background-color: rgba(0, 128, 0, 0.788);
+    z-index: 999;
+    border:0px;
+    border-radius: 20px;
+    margin:5px;
+    color:whitesmoke;
+    font-weight: 700;
+    padding:5px 10px;
+}
+.color-icon{
+    display:none;
+}
+.task-card:hover .color-icon{
+    display:block;
+
+}
+/* .task-card:hover .color-input{
+    position: absolute;
+    top:-3%;
+    left:-3%;
+    display: block;
+    width: 100%;
+    height: 50%;
+    border-bottom-right-radius: 20px;
+} */
+.task-card:hover .color-input,.color-icon{
+    width:25px;
+    height:25px;
+    border-radius: 50px;
+    color: rgba(0, 0, 0, 0.808);
+}
+ 
