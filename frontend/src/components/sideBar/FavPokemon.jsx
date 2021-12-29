@@ -7,13 +7,13 @@ import notify from "../../utils/notify";
 const FavPokemon = ({ pokemon }) => {
   const { favouriteList, setFavouriteList } = useData();
   const { name, image, type, id } = pokemon;
-    console.log(pokemon)
+   
 
   const removeFromFavourite = async () => {
     const res = await axios.delete(`${domain}/remove/${id}`, {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
-    console.log(res);
+   
     if (res.status == 204) {
         const resData = favouriteList.filter(pokemon => pokemon.id!=id)
         setFavouriteList(resData)

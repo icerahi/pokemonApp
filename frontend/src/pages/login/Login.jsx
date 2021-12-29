@@ -24,9 +24,12 @@ const Login = () => {
 
   const loginSubmit = (data) => {
     setIsLoading(true)
+    let formData = new FormData()
+    formData.append('username',data.username)
+    formData.append('password',data.password)
 
     axios
-      .post(`${domain}/login`,data)
+      .post(`${domain}/login`,formData)
       .then((res) => {
         const token = res?.data?.access_token;
         localStorage.setItem("token", token);
