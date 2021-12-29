@@ -15,14 +15,14 @@ class Pokemon(BaseModel):
     
 class ShowUserInline(BaseModel):
     username:str 
-    class Config():
+    class Config:
         orm_mode=True
         
 class ShowPokemon(Pokemon):
     id:str
     user:ShowUserInline
  
-    class Config():
+    class Config:
         orm_mode=True
         
 class User(BaseModel):
@@ -36,7 +36,7 @@ class ShowUser(BaseModel):
     email:str 
     pokemons:List[Pokemon]=[]
     
-    class Config():
+    class Config:
         orm_mode=True
     
     
