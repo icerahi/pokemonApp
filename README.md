@@ -65,9 +65,9 @@ And inside the src folder open the .env file and comment down `production domain
 It will open the Project in your default browser: http://localhost:3000
 
 ## Screenshots
-![Login](https://user-images.githubusercontent.com/32910469/147687157-ce60d878-382a-4e09-bc7a-8ec042269814.png)
+![Login](https://user-images.githubusercontent.com/32910469/147687152-984cd1d5-0c77-407d-9b5a-448e1593e2c2.png)
 
-![Home](https://user-images.githubusercontent.com/32910469/147687152-984cd1d5-0c77-407d-9b5a-448e1593e2c2.png)
+![Home](https://user-images.githubusercontent.com/32910469/147687157-ce60d878-382a-4e09-bc7a-8ec042269814.png)
 
  ![Favourite List](https://user-images.githubusercontent.com/32910469/147686907-e9d25e87-1cdd-4742-944e-da0783ab3328.png)
 
