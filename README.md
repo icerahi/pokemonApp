@@ -38,7 +38,7 @@ Clone the project
 Go to the project directory
 
 ```bash
-  cd pokemon_app
+  cd pokemonApp
 ```
 ### Setup backend 
  Go to project backend directory and write
