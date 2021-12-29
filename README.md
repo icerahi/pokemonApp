@@ -60,6 +60,7 @@ Go to frontend directory
 And inside the src folder open the .env file and comment down `production domain` and uncomment `localdomain`
 
 ```bash
+  npm i
   npm start
 ```
 It will open the Project in your default browser: http://localhost:3000
