@@ -8,19 +8,17 @@ from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy import or_
 from fastapi.middleware.cors import CORSMiddleware
 
+ 
+
+app = FastAPI()
+# app.add_middleware(
+#     CORSMiddleware, allow_origins=["*"], allow_credentials=True, allow_methods=["*"], allow_headers=["*"]
+# )
+
 models.Base.metadata.create_all(database.engine)
 
 get_db = database.get_db
-
-app = FastAPI()
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
+ 
 
 @app.get("/all",status_code=200,response_model=List[schemas.ShowPokemon])
 def all_pokemons(
@@ -105,27 +103,20 @@ def signup(user: schemas.User, db: Session = Depends(get_db)):
     return new_user
 
 
-@app.post("/login",status_code=200)
-def login(
-    request:schemas.OAuth2PasswordRequestJson, db: Session = Depends(get_db)
-):
-    user = (
-        db.query(models.User)
-        .filter(
-            or_(
-                models.User.email == request.username,
-                models.User.username == request.username,
-            )
-        )
-        .first()
-    )
+@app.post('/login')
+def login(request:OAuth2PasswordRequestForm=Depends(),db:Session=Depends(database.get_db)):
+    user = db.query(models.User).filter(models.User.email==request.username).first()
     if not user:
-        raise HTTPException(status_code=404, detail="Invalid Credentials")
-    if not Hash.verify(request.password, user.password):
-        raise HTTPException(status_code=404, detail="Incorrect Password!!")
+        raise HTTPException(status_code=404,detail="Invalid Credentials")
+    if not Hash.verify(request.password,user.password):
+        raise HTTPException(status_code=404,detail="Incorrect Password!!")
 
-    # genarate a jwt token for
+    # generat a jwt token 
+    
     access_token = oauth2.create_access_token(
-        token={"email": user.email, "username": user.username, "user_id": user.id}
+        token={"email": user.email,"username":user.username,'user_id':user.id}
     )
-    return {"access_token": access_token}
+    return {"access_token": access_token, "token_type": "bearer"}
+    
+
+

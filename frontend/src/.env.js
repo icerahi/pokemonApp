@@ -5,5 +5,5 @@ export const token = localStorage.getItem('token')
 export const domain = 'http://localhost:8000'  
 
 //for production domain
-// export const domain = 'https://taskmanage.pythonanywhere.com'  
+// export const domain = 'https://rthagu.deta.dev' 
 
