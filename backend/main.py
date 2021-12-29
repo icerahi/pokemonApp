@@ -7,13 +7,18 @@ from src.hashing import Hash
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy import or_
 from fastapi.middleware.cors import CORSMiddleware
-
- 
+import uvicorn
 
 app = FastAPI()
-# app.add_middleware(
-#     CORSMiddleware, allow_origins=["*"], allow_credentials=True, allow_methods=["*"], allow_headers=["*"]
-# )
+origins =['*']
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"], 
+)
+
 
 models.Base.metadata.create_all(database.engine)
 
@@ -80,34 +85,28 @@ def remove_pokemon(
     return {"detail": "deleted successfully!!"}
 
 
-@app.post("/signup", response_model=schemas.ShowUser,status_code=200)
-def signup(user: schemas.User, db: Session = Depends(get_db)):
-    user_exists = (
-        db.query(models.User)
-        .filter(
-            or_(models.User.email == user.email, models.User.username == user.username)
-        )
-        .first()
-    )
-    if user_exists is not None:
+@app.post("/signup",status_code=200,response_model=schemas.ShowUser)
+def signup(request: schemas.User, db: Session=Depends(get_db)):
+    user_exists = db.query(models.User).filter(or_(models.User.email==request.username,models.User.username==request.username)).first()
+
+    if user_exists:
         raise HTTPException(
             status_code=409, detail="User already exists with this email or username!!"
         )
 
-    new_user = models.User(
-        username=user.username, email=user.email, password=Hash.bcrypt(user.password)
-    )
+    new_user = models.User(username=request.username,email=request.email,password=Hash.bcrypt(request.password))
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
     return new_user
 
 
-@app.post('/login')
+@app.post('/login',status_code=200)
 def login(request:OAuth2PasswordRequestForm=Depends(),db:Session=Depends(database.get_db)):
-    user = db.query(models.User).filter(models.User.email==request.username).first()
+    user = db.query(models.User).filter(or_(models.User.email==request.username,models.User.username==request.username)).first()
     if not user:
         raise HTTPException(status_code=404,detail="Invalid Credentials")
+   
     if not Hash.verify(request.password,user.password):
         raise HTTPException(status_code=404,detail="Incorrect Password!!")
 
