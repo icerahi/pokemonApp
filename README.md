@@ -32,7 +32,7 @@ Comming
 Clone the project
 
 ```bash
-  git clone https://github.com/icerahi/pokemon_app
+  git clone https://github.com/icerahi/pokemonApp.git
 ```
 
 Go to the project directory
