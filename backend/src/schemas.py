@@ -1,59 +1,18 @@
-from typing import List, Optional
-from pydantic import BaseModel
-from pydantic.class_validators import validator
-from pydantic.fields import Field
+def pokemon_serializer(pokemon)->dict:
+    return {
+        "id":str(pokemon["_id"]),
+        "name":pokemon["name"],
+        "image":pokemon["image"],
+        "type":pokemon["type"],
+        "user":dict(pokemon["user"])
+    }
 
- 
+def pokemons_serializer(pokemons)->list:
+    return [pokemon_serializer(pokemon) for pokemon in pokemons]
 
-
-class Pokemon(BaseModel):
-    name:str
-    image:str
-    type:str
-    
- 
-    
-class ShowUserInline(BaseModel):
-    username:str 
-    class Config():
-        orm_mode=True
-        
-class ShowPokemon(Pokemon):
-    id:str
-    user:ShowUserInline
- 
-    class Config():
-        orm_mode=True
-        
-class User(BaseModel):
-    username:str
-    email:str 
-    password:str
-    
-    
-class ShowUser(BaseModel):
-    username:str 
-    email:str 
-    pokemons:List[Pokemon]=[]
-    
-    class Config():
-        orm_mode=True
-    
-    
-        
-class TokenData(BaseModel):
-    email:str 
-    username:str 
-    user_id:int
-    
-class OAuth2PasswordRequestJson(BaseModel):
-    grant_type:str= Field(None,regex="password")
-    username:str = Field(...)
-    password:str = Field(...)
-    scope:List[str]=Field(default_factory=list)
-    client_id:Optional[str]=None
-    client_secret:Optional[str]=None 
-    
-    @validator('scope',pre=True)
-    def scope_from_string(cls,v):
-        return v.split() if isinstance(v,str) else v 
+def user_serializer(user)->dict:
+    return {
+        "id":str(user["_id"]),
+        "username":user["username"],
+        "email":user["email"]
+    }
