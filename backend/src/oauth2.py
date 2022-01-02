@@ -1,7 +1,7 @@
 from fastapi import Depends,HTTPException,security
 from datetime import datetime,timedelta
 from jose import jwt,JWTError
-from src import schemas
+from src import models
 
 oauth2_scheme = security.OAuth2PasswordBearer(tokenUrl='login')
 
@@ -32,11 +32,10 @@ def get_current_user(token:str=Depends(oauth2_scheme)):
         payload = jwt.decode(token,SECRET_KEY,ALGORITHM)
         email:str = payload.get('email')
         username:str = payload.get('username')
-        user_id:int = payload.get('user_id')
         if email is None or username is None:
             raise credentials_exception
         
-        return schemas.TokenData(email=email,username=username,user_id=user_id)
+        return models.TokenData(email=email,username=username)
    
     except JWTError:
         raise credentials_exception
