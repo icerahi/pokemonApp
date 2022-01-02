@@ -1,7 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from src.routes import authentication,pokemon,user
-
+from src.routes import pokemon,user,authentication
 app = FastAPI()
 origins =['*']
 app.add_middleware(
