@@ -4,18 +4,15 @@
 **Pokemon App** is a FastAPI and Reactjs Fullstack Application where people can register and login to there account. And User able to add and remove pokemon in his favourite list.
 
 ## Live
-Comming
+Live frontend: https://pokemon-edvora.netlify.app/
+backend api docs:  https://6dm2sh.deta.dev/docs
 
 ## Tech Stack
 
 **Frontend:** Reactjs,ReactRouter,React-Hook-Form,Bootstrap,ContextAPI,
 
-**Backend:** Python,FastAPI,Sqlalchemy(ORM)
-
-
-
-# moving to mongo db 
-
+**Backend:** Python,FastAPI
+**Database:** Mongodb,SQL
 
   
 ## Features
